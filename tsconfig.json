@@ -13,10 +13,12 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "types": ["node", "vite/client"],
     "paths": {
       "@shared/*": ["./src/shared/*"]
     }
   },
-  "include": ["src", "vite.config.ts", "drizzle.config.ts"]
+  "include": ["src", "scripts", "vite.config.ts", "vitest.config.ts", "drizzle.config.ts"]
 }

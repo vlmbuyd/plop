@@ -1,10 +1,15 @@
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 
-export function createApp() {
-  const app = new Hono();
+import type { Db } from './db/client';
+import { createTaskRoutes } from './routes/tasks';
 
-  app.get('/api/health', (c) => c.json({ ok: true }));
+export function createApp(db: Db) {
+  const api = new Hono()
+    .get('/health', (c) => c.json({ ok: true }))
+    .route('/tasks', createTaskRoutes(db));
+
+  const app = new Hono().route('/api', api);
 
   if (process.env.NODE_ENV === 'production') {
     app.use('/*', serveStatic({ root: './dist' }));
@@ -13,3 +18,5 @@ export function createApp() {
 
   return app;
 }
+
+export type Api = ReturnType<typeof createApp>;
