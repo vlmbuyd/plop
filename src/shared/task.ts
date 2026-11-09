@@ -54,6 +54,9 @@ export interface InboxTask {
 
   durationMinutes: number | null;
 
+  /** AI가 배치를 제안했으면 그 시작 시각. */
+  suggestedStartsAt: string | null;
+
   createdAt: string;
 }
 

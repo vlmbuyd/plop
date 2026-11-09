@@ -334,8 +334,14 @@ function startOfDayMs(date: Date) {
   return d.getTime();
 }
 
-function toInboxTask(row: TaskRow): InboxTask {
-  return { id: row.id, title: row.title, durationMinutes: row.durationMinutes, createdAt: row.createdAt.toISOString() };
+function toInboxTask(row: TaskRow, suggested: Map<string, Date>): InboxTask {
+  return {
+    id: row.id,
+    title: row.title,
+    durationMinutes: row.durationMinutes,
+    suggestedStartsAt: suggested.get(row.id)?.toISOString() ?? null,
+    createdAt: row.createdAt.toISOString(),
+  };
 }
 
 /** 오른쪽 목록. 완료하지 않은 날짜 없는 할 일을 최근 것부터 묶음별로. */
@@ -347,12 +353,14 @@ export function getInbox(db: Db, groupingPending: boolean): InboxView {
     .orderBy(desc(tasks.createdAt))
     .all();
   const groupRows = db.select().from(groups).orderBy(asc(groups.createdAt)).all();
+  const suggested = new Map(db.select().from(suggestions).all().map((s) => [s.taskId, s.startsAt]));
+  const toItem = (row: TaskRow) => toInboxTask(row, suggested);
 
   return {
     groups: groupRows
-      .map((g) => ({ id: g.id, name: g.name, tasks: rows.filter((r) => r.groupId === g.id).map(toInboxTask) }))
+      .map((g) => ({ id: g.id, name: g.name, tasks: rows.filter((r) => r.groupId === g.id).map(toItem) }))
       .filter((g) => g.tasks.length > 0),
-    ungrouped: rows.filter((r) => r.groupId === null).map(toInboxTask),
+    ungrouped: rows.filter((r) => r.groupId === null).map(toItem),
     groupingPending,
   };
 }

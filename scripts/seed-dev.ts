@@ -23,13 +23,19 @@ function at(dayOffset: number, hour: number, minute = 0) {
 }
 
 const samples = [
-  { title: '알고리즘 스터디', startsAt: at(0, 13), endsAt: at(0, 13, 30), completedAt: at(0, 13, 30) },
+  { title: '알고리즘 스터디', startsAt: at(0, 13), endsAt: at(0, 13, 30), recurrence: { freq: 'weekdays' as const } },
   { title: '탐색 튜토리얼 기능 추가', startsAt: at(0, 0), endsAt: at(1, 0), allDay: true },
   { title: '테코톡 편집', startsAt: at(1, 14, 15), endsAt: at(1, 15, 15) },
-  { title: '알고리즘 스터디', startsAt: at(1, 13), endsAt: at(1, 13, 30) },
   { title: '피드백장 정리', startsAt: at(2, 11, 30), endsAt: at(2, 12, 30) },
   { title: '스프린트 데모데이', startsAt: at(4, 0), endsAt: at(5, 0), allDay: true },
   { title: '최종 데모데이 2부', startsAt: at(4, 14), endsAt: at(4, 16, 30) },
+  { title: '알고리즘 공부', startsAt: at(0, 13, 30), endsAt: at(0, 14, 10), completedAt: at(0, 14, 20) },
+  { title: '이력서 중본 최종 점검' },
+  { title: '하네스 토큰 사용량 측정' },
+  { title: '랜딩 페이지 인터랙션 라이브러리로 만들기' },
+  { title: 'TS 스터디 질문 달기' },
+  { title: 'react router, layout 노션에 정리' },
+  { title: '예비군 일정 확인' },
 ];
 
 db.delete(tasks).run();

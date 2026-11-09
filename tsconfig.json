@@ -20,5 +20,5 @@
       "@shared/*": ["./src/shared/*"]
     }
   },
-  "include": ["src", "scripts", "vite.config.ts", "vitest.config.ts", "drizzle.config.ts"]
+  "include": ["src", "scripts", "e2e", "playwright.config.ts", "vite.config.ts", "vitest.config.ts", "drizzle.config.ts"]
 }

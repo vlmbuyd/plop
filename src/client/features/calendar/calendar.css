@@ -116,3 +116,47 @@
 .plop-calendar .is-done .plop-event__check {
   background: color-mix(in srgb, var(--color-ink) 45%, transparent);
 }
+
+.plop-event__icon {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  margin-top: 2px;
+  margin-left: auto;
+  color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+}
+
+.plop-event.is-short .plop-event__icon {
+  margin-top: 0;
+}
+
+.plop-event__check {
+  cursor: pointer;
+}
+
+.plop-event__check:hover {
+  border-color: var(--color-ink);
+}
+
+/* AI 제안은 흐린 점선 칸으로 보여 준다. 누르면 확정하거나 지운다. */
+.plop-calendar .is-suggestion {
+  --fc-forma-event: transparent;
+  background: color-mix(in srgb, var(--color-suggestion-soft) 85%, transparent) !important;
+  border: 1.5px dashed color-mix(in srgb, var(--color-suggestion) 55%, transparent) !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+.plop-calendar .is-suggestion .plop-event {
+  color: var(--color-suggestion);
+}
+
+.plop-calendar .is-suggestion .plop-event__icon {
+  order: -1;
+  margin-left: 0;
+  color: var(--color-suggestion);
+}
+
+.plop-calendar .is-suggestion .plop-event__time {
+  color: color-mix(in srgb, var(--color-suggestion) 70%, transparent);
+}

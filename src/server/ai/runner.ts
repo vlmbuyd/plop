@@ -70,7 +70,7 @@ export function createClaudeRunner(bin = process.env.PLOP_CLAUDE_BIN ?? 'claude'
           '--system-prompt',
           system,
           '--json-schema',
-          JSON.stringify(z.toJSONSchema(schema)),
+          JSON.stringify(toCliJsonSchema(schema)),
         ], prompt);
 
         let parsed: { is_error?: boolean; result?: string; structured_output?: unknown };
@@ -89,6 +89,12 @@ export function createClaudeRunner(bin = process.env.PLOP_CLAUDE_BIN ?? 'claude'
       }
     },
   };
+}
+
+/** Claude Code는 $schema 표기(draft 2020-12 주소)를 받지 않아 뺀다. */
+export function toCliJsonSchema(schema: z.ZodType) {
+  const { $schema: _ignored, ...rest } = z.toJSONSchema(schema) as Record<string, unknown>;
+  return rest;
 }
 
 function spawnClaude(bin: string, args: string[], stdin: string) {
@@ -116,7 +122,9 @@ function spawnClaude(bin: string, args: string[], stdin: string) {
     child.on('close', (code) => {
       clearTimeout(timer);
       if (code === 0) return resolve(stdout);
-      const hint = /log ?in|auth/i.test(stderr + stdout) ? ' 터미널에서 claude에 로그인되어 있는지 확인해 주세요.' : '';
+      const detail = (stderr || stdout).trim().slice(0, 300);
+      console.error(`[ai] claude exited with ${code}: ${detail}`);
+      const hint = /log ?in|auth/i.test(detail) ? ' 터미널에서 claude에 로그인되어 있는지 확인해 주세요.' : '';
       reject(new AiError(`Claude Code 실행이 실패했습니다(코드 ${code}).${hint}`));
     });
 

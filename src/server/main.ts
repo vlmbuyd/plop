@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server';
 
 import { SERVER_PORT } from '../shared/config';
+import { createFakeRunner } from './ai/fakeRunner';
 import { createClaudeRunner } from './ai/runner';
 import { createApp } from './app';
 import { openDataDb, resolveDataDir } from './db/client';
@@ -8,7 +9,7 @@ import { GroupingService } from './services/grouping';
 import { offerReschedules } from './services/planning';
 
 const db = openDataDb();
-const ai = createClaudeRunner();
+const ai = process.env.PLOP_AI_FAKE === '1' ? createFakeRunner() : createClaudeRunner();
 const grouping = new GroupingService(db, ai);
 const app = createApp({ db, ai, grouping });
 
